@@ -4,7 +4,7 @@ import time
 import datetime
 
 
-class GrailScraper:
+class GrailLinkScraper:
 
     def __init__(self, designer):
         self.designer = designer
@@ -45,7 +45,12 @@ class GrailScraper:
 
     def get_item_links_and_info(self):
 
-        for item in self.driver.find_elements_by_css_selector('div.feed-item'):
+        items = self.driver.find_elements_by_css_selector('div.feed-item')
+
+        for i in range(len(items)-2):
+
+            item = items[i]
+        #for item in self.driver.find_elements_by_css_selector('div.feed-item'):
 
             """
             date_ago = item.find_element_by_class_name('date-ago').text
@@ -65,9 +70,11 @@ class GrailScraper:
                 curr_price = item.find_element_by_css_selector('h3.sub-title.bold.original-price').text
 
             """
+            product = item.find_element_by_css_selector('h3.sub-title.listing-title').text
+            print("getting link for product; {}".format(product))
             # link = item.find_element_by_xpath("//a[contains(@href,'/listings/')]").get_attribute('href')
             link = item.find_element_by_css_selector('a').get_attribute('href')
-            match = re.search('listings/(\d{5,7})-', link)
+            match = re.search('listings/(\d{4,7})-', link)
             prod_id = match.group(1)
 
             self.total_items -= 1
